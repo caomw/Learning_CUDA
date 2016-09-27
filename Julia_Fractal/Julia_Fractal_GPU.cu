@@ -40,7 +40,7 @@ kx = ((float)(DIM/2 - a)/(DIM/2))*1.5;
 ky = ((float)(DIM/2 - b)/(DIM/2))*1.5;
 
 // Tweak this value. CUDA BY EXAMPLE suggested this value
-complexNumber C(-0.8,0.156);
+complexNumber C(-0.81,0.166);
 complexNumber Zn(kx,ky);
 
 int iterator = 0;
@@ -61,13 +61,20 @@ __global__ void kernel(unsigned char *image_pointer)
 	int valueJ;
 	valueJ = julia_set_verify(x,y);
 	image_pointer[remap*4 + 0] = 0;
-	image_pointer[remap*4 + 1] = 255*valueJ;
-	image_pointer[remap*4 + 2] = 0;
+	image_pointer[remap*4 + 1] = 0;
+	image_pointer[remap*4 + 2] = 128*valueJ;
 	image_pointer[remap*4 + 3] = 255;
 }
 
 
 int main()
 {
-return 0;
+	CPUBitmap bitmap(DIM,DIM);
+	unsigned char *device_bitmap;
+	cudaMalloc((void**)&device_bitmap,bitmap.image_size());
+	dim3 grid(DIM,DIM);
+	kernel<<<grid,1>>>(device_bitmap);
+	cudaMemcpy(bitmap.get_ptr(),device_bitmap,bitmap.image_size(),cudaMemcpyDeviceToHost);
+	bitmap.display_and_exit();
+	cudaFree(device_bitmap);
 }
