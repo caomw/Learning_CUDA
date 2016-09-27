@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "/home/shreyas/CUDA_BY_EXAMPLE/common/book.h"
 
 //Size of the vectors
 #define N 50

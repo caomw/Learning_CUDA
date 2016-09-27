@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "/home/shreyas/CUDA_BY_EXAMPLE/common"
 
 //Size of the vectors
 #define N 50
@@ -87,7 +88,7 @@ int main(void)
 	{
 	validate = validate + mask_addition[tempidx];
 	}
-	printf("Validation of vector sum - Total: %d\n",validate);
+	printf("Validation of vector sum - Total: %d | Input: %d\n",validate,N);
 	
 	cudaFree(mask1_device);
 	cudaFree(mask2_device);
