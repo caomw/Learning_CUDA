@@ -52,6 +52,21 @@ for (iterator = 0; iterator < 200; iterator ++)
 return 1;
 }
 
+
+__global__ void kernel(unsigned char *image_pointer)
+{
+	int x = blockIdx.x;
+	int y = blockIdx.y;
+	int remap = x+y*gridDim.x;
+	int valueJ;
+	valueJ = julia_set_verify(x,y);
+	image_pointer[remap*4 + 0] = 0;
+	image_pointer[remap*4 + 1] = 255*valueJ;
+	image_pointer[remap*4 + 2] = 0;
+	image_pointer[remap*4 + 3] = 255;
+}
+
+
 int main()
 {
 return 0;
