@@ -40,7 +40,7 @@ kx = ((float)(DIM/2 - a)/(DIM/2))*1.5;
 ky = ((float)(DIM/2 - b)/(DIM/2))*1.5;
 
 // Tweak this value. CUDA BY EXAMPLE suggested this value
-complexNumber C(-0.81,0.146);
+complexNumber C(-0.81,0.166);
 complexNumber Zn(kx,ky);
 
 int iterator = 0;

@@ -34,22 +34,22 @@ struct complexNumber
 
 __device__ int julia_set_verify(int a, int b)
 {
-float kx, ky;
-// Convert from image co-ordinate system to imaginary plane - scaling and shifting
-kx = ((float)(DIM/2 - a)/(DIM/2))*1.5;
-ky = ((float)(DIM/2 - b)/(DIM/2))*1.5;
+	float kx, ky;
+	// Convert from image co-ordinate system to imaginary plane - scaling and shifting
+	kx = ((float)(DIM/2 - a)/(DIM/2))*1.5;
+	ky = ((float)(DIM/2 - b)/(DIM/2))*1.5;
 
-// Tweak this value. CUDA BY EXAMPLE suggested this value
-complexNumber C(-0.81,0.166);
-complexNumber Zn(kx,ky);
+	// Tweak this value. CUDA BY EXAMPLE suggested this value
+	complexNumber C(-0.81,0.166);
+	complexNumber Zn(kx,ky);
 
-int iterator = 0;
-for (iterator = 0; iterator < 200; iterator ++)
-{
-	Zn = (Zn*Zn) + C;
-	if (Zn.mag()>1000) return 0;
-}
-return 1;
+	int iterator = 0;
+	for (iterator = 0; iterator < 200; iterator ++)
+	{
+		Zn = (Zn*Zn) + C;
+		if (Zn.mag()>1000) return 0;
+	}
+	return 1;
 }
 
 
