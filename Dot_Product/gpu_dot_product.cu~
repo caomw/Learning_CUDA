@@ -1,0 +1,7 @@
+#include "/home/shreyas/CUDA_BY_EXAMPLE/common/book.h"
+
+const int threads_per_block = 256;
+const int N = 33 * 1024;
+
+// Define a macro for finding the smaller of two integers
+#define min_value(a,b) (a<b?a:b)
