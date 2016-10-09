@@ -1,10 +1,10 @@
 #include "/home/shreyas/CUDA_BY_EXAMPLE/common/book.h"
 
-const int threads_per_block = 256;
-const int N = 33 * 1024;
-
 // Define a macro for finding the smaller of two integers
 #define min_value(a,b) (a<b?a:b)
+const int threads_per_block = 256;
+const int N = 33 * 1024;
+const int blocks_per_grid = min_value(32,(N+threads_per_block-1)/threads_per_block);
 
 __global__ dotprod(float *vector1, float *vector2, float *result)
 { 
@@ -53,4 +53,32 @@ __global__ dotprod(float *vector1, float *vector2, float *result)
 		result[blockIdx.x] = cache[0];
 	}
 }
+
+int main(void)
+{
+	float *vec1,*vec2,*dot_res,*block_sum;
+	float *device_vec1,*device_vec2,*device_block_sum;
+	vec1 = (float*)malloc(N*sizeof(float));
+	vec2 = (float*)malloc(N*sizeof(float));
+	block_sum = (float*)malloc(blocks_per_grid*sizeof(float));
+	
+	cudaMalloc((void**)&device_vec1,N*sizeof(float));
+	cudaMalloc((void**)&device_vec2,N*sizeof(float));
+	cudaMalloc((void**)&device_block_sum,blocks_per_grid*sizeof(float));
+
+	for (int i=0;i<N;i++)
+	{
+		vec1[i] = i;
+		vec2[i] = i*2;
+	}
+
+	cudaMemcpy(device_vec1,vec1,N*sizeof(float),cudaMemcpyHostToDevice);
+	cudaMemcpy(device_vec2,vec2,N*sizeof(float),cudaMemcpyHostToDevice);
+	
+	dotprod<<<blocks_per_grid,threads_per_block>>>(device_vec1,device_vec2,device_block_sum);
+
+	cudaMemcpy(block_sum,device_block_sum,blocks_per_grid*sizeof(float),cudaMemcpyDeviceToHost);
+	
+	
+	
 			
