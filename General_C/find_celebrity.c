@@ -18,23 +18,16 @@ int main()
 		for(j=0;j<n_people;j++)
 		{	
 			row_sum += matrix[i][j];
-			printf("%d ",matrix[i][j]);
 			col_sum_vec[j] = col_sum_vec[j] + matrix[i][j];
 		}
-		printf("   sum = %d",row_sum);
 		row_sum_vec[i] = row_sum;
-		printf("\n");
 	}
-	printf("\n");
 	int calculated_index = 0;
 	for(i=0;i<n_people;i++)
 	{
 		if (col_sum_vec[i] == n_people && row_sum_vec[i] == 1) calculated_index = i;
-		printf("%d ",col_sum_vec[i]);
 	}	 
-	printf("\n   sum \n");
-
-	printf("Celebrity is located at index: %d.\n\n",calculated_index);
+	printf("Celebrity is located at index: %d.\n",calculated_index);
 	return 0;
 }
 
