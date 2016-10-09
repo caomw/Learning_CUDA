@@ -6,7 +6,7 @@ const int threads_per_block = 256;
 const int N = 33 * 1024;
 const int blocks_per_grid = min_value(32,(N+threads_per_block-1)/threads_per_block);
 
-__global__ dotprod(float *vector1, float *vector2, float *result)
+__global__ void dotprod(float *vector1, float *vector2, float *result)
 { 
 	// Create a buffer on the GPU shared memory to store the intermediate sums
 	__shared__ float buffer[threads_per_block];
@@ -50,13 +50,13 @@ __global__ dotprod(float *vector1, float *vector2, float *result)
 	{
 		// Add thread sum to block result, return control to CPU to perform
 		// final arithmetic addition of block sums
-		result[blockIdx.x] = cache[0];
+		result[blockIdx.x] = buffer[0];
 	}
 }
 
 int main(void)
 {
-	float *vec1,*vec2,*dot_res,*block_sum;
+	float *vec1,*vec2,dot_res,*block_sum;
 	float *device_vec1,*device_vec2,*device_block_sum;
 	vec1 = (float*)malloc(N*sizeof(float));
 	vec2 = (float*)malloc(N*sizeof(float));
@@ -77,7 +77,30 @@ int main(void)
 	
 	dotprod<<<blocks_per_grid,threads_per_block>>>(device_vec1,device_vec2,device_block_sum);
 
+	cudaMemcpy(block_sum,device_block_sum,blocks_per_grid*sizeof(float),cudaMemcpyDeviceToHost);
 
+	// Now that we have the block sum results, we continue with rest of the computation on the CPU
+	dot_res = 0;
+	for (int i=0;i<blocks_per_grid;i++)
+	{
+		dot_res = dot_res + block_sum[i];
+	}
+
+	// Verify the dot product result by computing the closed form solution
+	#define sum_of_squares(x) (x*(x+1)*(2*x+1)/6)
+	
+	printf("%.6g == %.6g?\n",dot_res,2*sum_of_squares((float)(N-1)));
+
+	cudaFree(device_vec1);
+	cudaFree(device_vec2);
+	cudaFree(device_block_sum);
+	
+	free(vec1);
+	free(vec2);
+	free(block_sum);
+}
+
+	
 	
 	
 			
