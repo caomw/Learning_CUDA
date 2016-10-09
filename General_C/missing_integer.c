@@ -23,7 +23,7 @@ int main()
 	int actual_sum = n*(n+1)/2;
 
 	int missing_value = actual_sum - arr_sum;
-	printf("Missing value is %d\n",missing_value);
+	printf("The single missing number is %d\n",missing_value);
 	
 	// Two integers are missing
 	printf("---------- TWO MISSING INTEGERS ---------\n");
@@ -43,18 +43,18 @@ int main()
 		actual_prod *= i;
 	}
 	float actual_sum2 = n2*(n2+1)/2;
-	printf("Sum of all %d integers is %.6f\n",n_minus_2,arr2_sum);
-	printf("Product of all %d integers is %.6f\n",n_minus_2,arr2_prod);
-	printf("Actual sum is %.6f and actual product is %d\n",actual_sum2,actual_prod);
+	//printf("Sum of all %d integers is %.6f\n",n_minus_2,arr2_sum);
+	//printf("Product of all %d integers is %.6f\n",n_minus_2,arr2_prod);
+	//printf("Actual sum is %.6f and actual product is %d\n",actual_sum2,actual_prod);
 	float x_plus_y = actual_sum2 - arr2_sum;
 	float xy = actual_prod/arr2_prod;
 
 	float diffsqr = sqrt(x_plus_y * x_plus_y - 4*xy);
-	printf("The difference of x and y is %.6f\n",diffsqr);
+	//printf("The difference of x and y is %.6f\n",diffsqr);
 	// We found (x+y) and we found (x-y). Solve simultaneous equations to get (x) and (y)
-	float a = (x_plus_y + diffsqr)/2;
-	float b = x_plus_y - a;
-	printf("The numbers are %.6f and %.6f\n",a,b);
+	int a = (int)(x_plus_y + diffsqr)/2;
+	int b = (int)(x_plus_y - a);
+	printf("The two missing numbers are %d and %d\n",a,b);
 	return 0;
 }
 	 
