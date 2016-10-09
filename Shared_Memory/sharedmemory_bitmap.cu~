@@ -8,14 +8,23 @@
 
 __global__ void pixelmapping(unsigned char *ptr)
 {
+	// Find linearized pixel co-ordinate locations (thread index in 2D)
 	int x = threadIdx.x + blockIdx.x * blockDim.x;
 	int y = threadIdx.y + blockIdx.y * blockDim.y;
 	int offset = x + y * blockDim.x * gridDim.x;
+
+	// Allocate 16x16 array of shared memory
 	__shared__ float shared[16][16];
 	
 	const float period = 128.0f;
+
+	// "each thread will be computing a pixel value for a single output location"
 	shared[threadIdx.x][threadIdx.y] = 255*(sinf(x*2.0f*PI/period) + 1.0f)*(sinf(y*2.0f*PI/period))/4.0f;
-	//__syncthreads();
+
+	// Sync between write and read is necessary to generate correct blob pixels
+	__syncthreads();
+
+	// Display the image with the GREEN channel being a function of the given colour mapping
 	ptr[offset*4 + 0] = 0;
 	ptr[offset*4 + 1] = shared[15-threadIdx.x][15-threadIdx.y];
 	ptr[offset*4 + 2] = 0;
