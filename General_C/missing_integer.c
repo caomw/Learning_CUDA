@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-// Add -lm while compiling 
+// Add -lm while compiling : gcc -o output.o missing_integer.c -lm
 
 /* Given an array with length n-1 which contains integers of the range 1 to n. Each element is distinct and appears only once. One integer is missing. Find the missing integer in linear time using O(1) memory. Now two integers are missing, find them out in linear time using O(1) memory. How about three? */
 
@@ -55,6 +55,7 @@ int main()
 	int a = (int)(x_plus_y + diffsqr)/2;
 	int b = (int)(x_plus_y - a);
 	printf("The two missing numbers are %d and %d\n",a,b);
+	
 	return 0;
 }
 	 
